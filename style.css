@@ -107,7 +107,7 @@ nav a:hover {
     opacity: 0.9;
 }
 
-/* Botón flotante para el Night Bar */
+/* Botón flotante para el Night/Day Bar */
 .mode-toggle-btn {
     position: fixed;
     bottom: 2rem;
@@ -130,7 +130,7 @@ nav a:hover {
     transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Estado al deslizar hacia abajo: Se contrae pero la luna se queda visible y baja su opacidad */
+/* Estado al deslizar hacia abajo: Se contrae dejando visible solo el icono y baja la opacidad */
 .mode-toggle-btn.scrolled-down {
     padding: 0.85rem 1rem;
     border-radius: 30px;
@@ -138,7 +138,6 @@ nav a:hover {
     opacity: 0.5;
 }
 
-/* Oculta únicamente el texto largo, dejando la luna intacta */
 .mode-toggle-btn.scrolled-down .btn-text {
     display: none;
 }
