@@ -11,7 +11,7 @@
 </head>
 <body>
 
-    <button class="mode-toggle-btn" id="modeToggle">🌙 Switch to Night Bar</button>
+    <button class="mode-toggle-btn" id="modeToggle">🌙 <span class="btn-text">Switch to Night Bar</span></button>
 
     <header>
         <div class="logo">Atabey</div>
@@ -46,6 +46,20 @@
             <button class="chaos-btn" onclick="triggerChaos()">🎲 Random Menu Chaos</button>
         </div>
     </div>
+
+    <!-- Buscador de Adopción de Plantas Interactiva -->
+    <section class="plant-adoption-section">
+        <h3>🌿 Meet the Jungle Residents</h3>
+        <p>90% of our plants have names and attitude. Search a plant name (like <strong>Monstera</strong>, <strong>Money Tree</strong>, or <strong>Aglaonema</strong>) to check its daily vibe:</p>
+        
+        <div class="plant-search-box">
+            <input type="text" id="plantInput" placeholder="Type a plant name (e.g. Monstera)...">
+            <button onclick="searchPlantVibe()">Check Plant Vibe</button>
+        </div>
+        <div class="plant-result-card" id="plantResult">
+            ✨ Type a plant above to unlock its deep dark secrets.
+        </div>
+    </section>
 
     <!-- Menú Destacado -->
     <section class="featured-section">
@@ -140,7 +154,7 @@
                 </div>
             </div>
             <div class="map-box">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3505.856983777598!2d-81.3655!3d28.5535!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88e7700e844a49c9%3A0x6b16e45f917578!2sMills%2050%2C%20Orlando%2C%20FL!5e0!3m2!1sen!2sus!4v1650000000000!5m2!1sen!2sus" allowfullscreen="" loading="lazy"></iframe>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3505.856983777598!2d-81.3655!3d28.5535!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88e7700e844a49c9%3A0x6b16e45f917578!2sMills%2050%2C%20Orlando%2C%20FL!5e0!3m2!1sen!2sus&hl=en" allowfullscreen="" loading="lazy"></iframe>
             </div>
         </div>
     </section>
