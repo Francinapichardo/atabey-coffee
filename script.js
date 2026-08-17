@@ -1,8 +1,48 @@
 const mobileMenu = document.getElementById('mobile-menu');
 const navMenu = document.getElementById('nav-menu');
 
-mobileMenu.addEventListener('click', () => {
+// Abre o cierra el menú al tocar el botón de hamburguesa
+mobileMenu.addEventListener('click', (e) => {
+    e.stopPropagation();
+    navMenu.classList.remove('hiding');
     navMenu.classList.toggle('active');
+});
+
+// Cierra el menú al instante tan pronto como comiences a deslizar hacia abajo
+let lastScrollTop = 0;
+window.addEventListener('scroll', () => {
+    let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+    
+    // Con un umbral muy pequeño (tan solo 3 píxeles de movimiento), el menú se contrae de inmediato
+    if (currentScroll > lastScrollTop + 3 && navMenu.classList.contains('active')) {
+        navMenu.classList.add('hiding');
+        setTimeout(() => {
+            navMenu.classList.remove('active', 'hiding');
+        }, 250); // Tiempo de la animación
+    }
+    
+    lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+});
+
+// Cierra el menú al hacer clic en los enlaces o botones internos
+const navLinks = navMenu.querySelectorAll('a, button');
+navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+        navMenu.classList.add('hiding');
+        setTimeout(() => {
+            navMenu.classList.remove('active', 'hiding');
+        }, 250);
+    });
+});
+
+// Cierra el menú si haces clic fuera de él
+document.addEventListener('click', (e) => {
+    if (!navMenu.contains(e.target) && !mobileMenu.contains(e.target) && navMenu.classList.contains('active')) {
+        navMenu.classList.add('hiding');
+        setTimeout(() => {
+            navMenu.classList.remove('active', 'hiding');
+        }, 250);
+    }
 });
 
 const modalOverlay = document.getElementById('modalOverlay');
