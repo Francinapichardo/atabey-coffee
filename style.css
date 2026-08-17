@@ -107,6 +107,7 @@ nav a:hover {
     opacity: 0.9;
 }
 
+/* Botón flotante con transición para hacerse discreto al hacer scroll */
 .mode-toggle-btn {
     position: fixed;
     bottom: 2rem;
@@ -125,6 +126,12 @@ nav a:hover {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.mode-toggle-btn.scrolled-down {
+    transform: scale(0.85) translateX(10px);
+    opacity: 0.5;
 }
 
 .menu-toggle {
@@ -568,7 +575,7 @@ footer {
         white-space: normal;
     }
     
-    /* Menú móvil con transición fluida para deslizarse hacia arriba al cerrar */
+    /* Menú móvil con animación fluida de deslizamiento hacia arriba */
     nav {
         display: flex;
         flex-direction: column;
