@@ -107,7 +107,7 @@ nav a:hover {
     opacity: 0.9;
 }
 
-/* Botón flotante con transición para hacerse discreto al hacer scroll */
+/* Botón flotante para el Night Bar */
 .mode-toggle-btn {
     position: fixed;
     bottom: 2rem;
@@ -126,12 +126,21 @@ nav a:hover {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    transition: transform 0.3s ease, opacity 0.3s ease;
+    overflow: hidden;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* Estado al deslizar hacia abajo: Se contrae pero la luna se queda visible y baja su opacidad */
 .mode-toggle-btn.scrolled-down {
-    transform: scale(0.85) translateX(10px);
+    padding: 0.85rem 1rem;
+    border-radius: 30px;
+    transform: scale(0.9);
     opacity: 0.5;
+}
+
+/* Oculta únicamente el texto largo, dejando la luna intacta */
+.mode-toggle-btn.scrolled-down .btn-text {
+    display: none;
 }
 
 .menu-toggle {
@@ -239,6 +248,81 @@ nav a:hover {
 
 .fun-btn:hover, .chaos-btn:hover {
     transform: scale(1.05);
+}
+
+/* Estilos para el Buscador de Adopción de Plantas */
+.plant-adoption-section {
+    max-width: 800px;
+    margin: 2rem auto 4rem auto;
+    padding: 3rem;
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+}
+
+.plant-adoption-section h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    color: var(--accent-green);
+    margin-bottom: 0.8rem;
+}
+
+.plant-adoption-section p {
+    font-size: 0.95rem;
+    color: var(--text-main);
+    opacity: 0.8;
+    margin-bottom: 1.5rem;
+}
+
+.plant-search-box {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    max-width: 500px;
+    margin: 0 auto 1.5rem auto;
+}
+
+.plant-search-box input {
+    flex: 1;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--sand);
+    border-radius: 30px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    outline: none;
+}
+
+.plant-search-box button {
+    background-color: var(--accent-green);
+    color: var(--white);
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 30px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: transform 0.2s;
+}
+
+.plant-search-box button:hover {
+    transform: scale(1.05);
+}
+
+.plant-result-card {
+    font-size: 1.05rem;
+    color: var(--text-main);
+    font-weight: 500;
+    padding: 1.2rem;
+    background-color: var(--bg-color);
+    border-radius: 8px;
+    min-height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed var(--sand);
+    transition: all 0.3s ease;
 }
 
 .featured-section {
@@ -575,7 +659,7 @@ footer {
         white-space: normal;
     }
     
-    /* Menú móvil con animación fluida de deslizamiento hacia arriba */
+    /* Menú móvil con transición fluida para deslizarse hacia arriba al cerrar */
     nav {
         display: flex;
         flex-direction: column;
@@ -617,6 +701,9 @@ footer {
         font-size: 2.3rem;
     }
     .newsletter-form {
+        flex-direction: column;
+    }
+    .plant-search-box {
         flex-direction: column;
     }
 }
