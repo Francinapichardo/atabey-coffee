@@ -567,22 +567,39 @@ footer {
         padding: 0.6rem 0.5rem;
         white-space: normal;
     }
+    
+    /* Menú móvil con transición fluida para deslizarse hacia arriba al cerrar */
     nav {
-        display: none;
+        display: flex;
         flex-direction: column;
         position: absolute;
         top: 100%;
         left: 0;
         width: 100%;
-        background: var(--card-bg);
+        background-color: var(--card-bg);
         padding: 1.5rem;
         border-bottom: 1px solid var(--sand);
-        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
         gap: 1rem;
+        z-index: 200;
+        
+        transform: translateY(-20px);
+        opacity: 0;
+        visibility: hidden;
+        transition: transform 0.35s ease, opacity 0.35s ease, visibility 0.35s ease;
     }
+    
     nav.active {
-        display: flex;
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
     }
+    
+    nav.hiding {
+        transform: translateY(-30px);
+        opacity: 0;
+    }
+
     nav a {
         margin: 0;
     }
