@@ -7,27 +7,24 @@ mobileMenu.addEventListener('click', (e) => {
     navMenu.classList.toggle('active');
 });
 
-// Detecta el scroll para cerrar el menú y contraer el botón flotante dejando la luna/sol visible
-let lastScrollTop = 0;
+// Detecta el scroll para cerrar el menú y contraer/expandir el botón flotante con base en la posición superior
 window.addEventListener('scroll', () => {
     let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
     const modeBtn = document.getElementById('modeToggle');
     
-    if (currentScroll > lastScrollTop + 3 && navMenu.classList.contains('active')) {
+    if (currentScroll > 3 && navMenu.classList.contains('active')) {
         navMenu.classList.add('hiding');
         setTimeout(() => {
             navMenu.classList.remove('active', 'hiding');
         }, 250);
     }
     
-    // Contrae el botón dejando solo el icono y reduce la opacidad al bajar la página
-    if (currentScroll > lastScrollTop && currentScroll > 50) {
+    // Si bajas más de 50px se contrae a solo el icono; si regresas arriba del todo, se expande completo
+    if (currentScroll > 50) {
         modeBtn.classList.add('scrolled-down');
     } else {
         modeBtn.classList.remove('scrolled-down');
     }
-    
-    lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
 });
 
 const navLinks = navMenu.querySelectorAll('a, button');
@@ -73,13 +70,11 @@ modeToggleBtn.addEventListener('click', () => {
     const btnText = modeToggleBtn.querySelector('.btn-text');
     
     if (htmlElement.classList.contains('night-mode')) {
-        // Cambiamos el icono del botón a un sol (☀️) cuando está en modo noche y listo para volver al día
         modeToggleBtn.childNodes[0].nodeValue = "☀️ ";
         if (btnText) btnText.textContent = "Switch to Day Coffee";
         heroTitle.textContent = "Botanical cocktails & neon whispers in Mills 50";
         heroSubtitle.textContent = "The sun is down, the plants are resting, and the craft cocktails are waiting for your drama.";
     } else {
-        // Cambiamos el icono a la luna (🌙) cuando está en modo día
         modeToggleBtn.childNodes[0].nodeValue = "🌙 ";
         if (btnText) btnText.textContent = "Switch to Night Bar";
         heroTitle.textContent = "Urban nature & specialty coffee in Mills 50";
