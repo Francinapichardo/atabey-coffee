@@ -8,17 +8,25 @@ mobileMenu.addEventListener('click', (e) => {
     navMenu.classList.toggle('active');
 });
 
-// Cierra el menú al instante tan pronto como comiences a deslizar hacia abajo
+// Detecta el scroll para cerrar el menú móvil con suavidad y minimizar el botón flotante
 let lastScrollTop = 0;
 window.addEventListener('scroll', () => {
     let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+    const modeBtn = document.getElementById('modeToggle');
     
-    // Con un umbral muy pequeño (tan solo 3 píxeles de movimiento), el menú se contrae de inmediato
+    // Cierra el menú móvil de inmediato al deslizar hacia abajo (con alta sensibilidad)
     if (currentScroll > lastScrollTop + 3 && navMenu.classList.contains('active')) {
         navMenu.classList.add('hiding');
         setTimeout(() => {
             navMenu.classList.remove('active', 'hiding');
-        }, 250); // Tiempo de la animación
+        }, 250);
+    }
+    
+    // Oculta/minimiza ligeramente el botón flotante de "Switch to Night Bar" al bajar
+    if (currentScroll > lastScrollTop && currentScroll > 50) {
+        modeBtn.classList.add('scrolled-down');
+    } else {
+        modeBtn.classList.remove('scrolled-down');
     }
     
     lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
