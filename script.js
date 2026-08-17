@@ -1,20 +1,18 @@
 const mobileMenu = document.getElementById('mobile-menu');
 const navMenu = document.getElementById('nav-menu');
 
-// Abre o cierra el menú al tocar el botón de hamburguesa
 mobileMenu.addEventListener('click', (e) => {
     e.stopPropagation();
     navMenu.classList.remove('hiding');
     navMenu.classList.toggle('active');
 });
 
-// Detecta el scroll para cerrar el menú móvil con suavidad y minimizar el botón flotante
+// Detecta el scroll para cerrar el menú y contraer el botón flotante dejando la luna/sol visible
 let lastScrollTop = 0;
 window.addEventListener('scroll', () => {
     let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
     const modeBtn = document.getElementById('modeToggle');
     
-    // Cierra el menú móvil de inmediato al deslizar hacia abajo (con alta sensibilidad)
     if (currentScroll > lastScrollTop + 3 && navMenu.classList.contains('active')) {
         navMenu.classList.add('hiding');
         setTimeout(() => {
@@ -22,7 +20,7 @@ window.addEventListener('scroll', () => {
         }, 250);
     }
     
-    // Oculta/minimiza ligeramente el botón flotante de "Switch to Night Bar" al bajar
+    // Contrae el botón dejando solo el icono y reduce la opacidad al bajar la página
     if (currentScroll > lastScrollTop && currentScroll > 50) {
         modeBtn.classList.add('scrolled-down');
     } else {
@@ -32,7 +30,6 @@ window.addEventListener('scroll', () => {
     lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
 });
 
-// Cierra el menú al hacer clic en los enlaces o botones internos
 const navLinks = navMenu.querySelectorAll('a, button');
 navLinks.forEach(link => {
     link.addEventListener('click', () => {
@@ -43,7 +40,6 @@ navLinks.forEach(link => {
     });
 });
 
-// Cierra el menú si haces clic fuera de él
 document.addEventListener('click', (e) => {
     if (!navMenu.contains(e.target) && !mobileMenu.contains(e.target) && navMenu.classList.contains('active')) {
         navMenu.classList.add('hiding');
@@ -74,12 +70,18 @@ const heroSubtitle = document.getElementById('heroSubtitle');
 
 modeToggleBtn.addEventListener('click', () => {
     htmlElement.classList.toggle('night-mode');
+    const btnText = modeToggleBtn.querySelector('.btn-text');
+    
     if (htmlElement.classList.contains('night-mode')) {
-        modeToggleBtn.innerHTML = '☀️ Switch to Day Coffee';
+        // Cambiamos el icono del botón a un sol (☀️) cuando está en modo noche y listo para volver al día
+        modeToggleBtn.childNodes[0].nodeValue = "☀️ ";
+        if (btnText) btnText.textContent = "Switch to Day Coffee";
         heroTitle.textContent = "Botanical cocktails & neon whispers in Mills 50";
         heroSubtitle.textContent = "The sun is down, the plants are resting, and the craft cocktails are waiting for your drama.";
     } else {
-        modeToggleBtn.innerHTML = '🌙 Switch to Night Bar';
+        // Cambiamos el icono a la luna (🌙) cuando está en modo día
+        modeToggleBtn.childNodes[0].nodeValue = "🌙 ";
+        if (btnText) btnText.textContent = "Switch to Night Bar";
         heroTitle.textContent = "Urban nature & specialty coffee in Mills 50";
         heroSubtitle.textContent = "A sanctuary where specialty coffee, craft cocktails, and an exclusive botanical selection coexist to disconnect from the noise.";
     }
@@ -149,4 +151,30 @@ function secretReveal(card, secretText) {
 
 function revealSecret(card, text) {
     secretReveal(card, text);
+}
+
+const plantDatabase = {
+    "monstera": "🌱 Monstera (Named 'Carlos'): Thinks he's a tropical god. Wants bright indirect light, a misting session, and for you to stop touching his new fenestrated leaves.",
+    "money tree": "🌿 Money Tree (Named 'Lulu'): Supposed to bring financial prosperity. Currently judging your recent online shopping cart choices. Water only when dry.",
+    "aglaonema": "🪴 Aglaonema (Named 'Abuela'): Low maintenance queen. She survives on pure spite, fluorescent office light, and weekly sips of tap water.",
+    "philodendron": "🍃 Philodendron (Named 'Ziggy'): Dramatic climber. If you forget to water him for 2 days, he will throw a full emotional tantrum.",
+    "syngonium": "🌿 Syngonium (Named 'Pip'): Arrowhead plant. Changes leaf shapes just to confuse you. Likes humidity and being complimented on her colors.",
+    "orchid": "🌸 Orchid (Named 'Priscilla'): High maintenance diva. Demands absolute perfection, ice cubes on Tuesdays, and a round of applause when she blooms once a year."
+};
+
+function searchPlantVibe() {
+    const input = document.getElementById('plantInput').value.toLowerCase().trim();
+    const resultBox = document.getElementById('plantResult');
+    
+    resultBox.style.opacity = 0;
+    setTimeout(() => {
+        if (plantDatabase[input]) {
+            resultBox.textContent = plantDatabase[input];
+        } else if (input === "") {
+            resultBox.textContent = "✨ Please type a plant name first!";
+        } else {
+            resultBox.textContent = `🌵 Plant '${input}' is currently hiding in the jungle or plotting a rebellion. Try searching: Monstera, Money Tree, Aglaonema, Philodendron, Syngonium, or Orchid.`;
+        }
+        resultBox.style.opacity = 1;
+    }, 200);
 }
