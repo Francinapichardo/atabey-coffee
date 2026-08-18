@@ -1,175 +1,708 @@
-const mobileMenu = document.getElementById('mobile-menu');
-const navMenu = document.getElementById('nav-menu');
-
-mobileMenu.addEventListener('click', (e) => {
-    e.stopPropagation();
-    navMenu.classList.remove('hiding');
-    navMenu.classList.toggle('active');
-});
-
-// Detecta el scroll para cerrar el menú y contraer/expandir el botón flotante con base en la posición superior
-window.addEventListener('scroll', () => {
-    let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
-    const modeBtn = document.getElementById('modeToggle');
-    
-    if (currentScroll > 3 && navMenu.classList.contains('active')) {
-        navMenu.classList.add('hiding');
-        setTimeout(() => {
-            navMenu.classList.remove('active', 'hiding');
-        }, 250);
-    }
-    
-    // Si bajas más de 50px se contrae a solo el icono; si regresas arriba del todo, se expande completo
-    if (currentScroll > 50) {
-        modeBtn.classList.add('scrolled-down');
-    } else {
-        modeBtn.classList.remove('scrolled-down');
-    }
-});
-
-const navLinks = navMenu.querySelectorAll('a, button');
-navLinks.forEach(link => {
-    link.addEventListener('click', () => {
-        navMenu.classList.add('hiding');
-        setTimeout(() => {
-            navMenu.classList.remove('active', 'hiding');
-        }, 250);
-    });
-});
-
-document.addEventListener('click', (e) => {
-    if (!navMenu.contains(e.target) && !mobileMenu.contains(e.target) && navMenu.classList.contains('active')) {
-        navMenu.classList.add('hiding');
-        setTimeout(() => {
-            navMenu.classList.remove('active', 'hiding');
-        }, 250);
-    }
-});
-
-const modalOverlay = document.getElementById('modalOverlay');
-const openModalBtn = document.getElementById('openModal');
-const closeModalBtn = document.getElementById('closeModal');
-
-function toggleModal() {
-    modalOverlay.classList.toggle('open');
+:root {
+    --bg-color: #F7F5F0;
+    --text-main: #2C352D;
+    --accent-green: #3B4D3C;
+    --sand: #E6E2D8;
+    --white: #FFFFFF;
+    --pop-pink: #E88873;
+    --card-bg: #FFFFFF;
 }
 
-openModalBtn.addEventListener('click', toggleModal);
-closeModalBtn.addEventListener('click', toggleModal);
-modalOverlay.addEventListener('click', (e) => {
-    if (e.target === modalOverlay) toggleModal();
-});
+.night-mode {
+    --bg-color: #171C18;
+    --text-main: #E6E2D8;
+    --accent-green: #8FA890;
+    --sand: #242D25;
+    --white: #1E2520;
+    --pop-pink: #D8705C;
+    --card-bg: #1E2520;
+}
 
-const modeToggleBtn = document.getElementById('modeToggle');
-const htmlElement = document.documentElement;
-const heroTitle = document.getElementById('heroTitle');
-const heroSubtitle = document.getElementById('heroSubtitle');
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    transition: background-color 0.4s ease, color 0.4s ease;
+}
 
-modeToggleBtn.addEventListener('click', () => {
-    htmlElement.classList.toggle('night-mode');
-    const btnText = modeToggleBtn.querySelector('.btn-text');
-    
-    if (htmlElement.classList.contains('night-mode')) {
-        modeToggleBtn.childNodes[0].nodeValue = "☀️ ";
-        if (btnText) btnText.textContent = "Switch to Day Coffee";
-        heroTitle.textContent = "Botanical cocktails & neon whispers in Mills 50";
-        heroSubtitle.textContent = "The sun is down, the plants are resting, and the craft cocktails are waiting for your drama.";
-    } else {
-        modeToggleBtn.childNodes[0].nodeValue = "🌙 ";
-        if (btnText) btnText.textContent = "Switch to Night Bar";
-        heroTitle.textContent = "Urban nature & specialty coffee in Mills 50";
-        heroSubtitle.textContent = "A sanctuary where specialty coffee, craft cocktails, and an exclusive botanical selection coexist to disconnect from the noise.";
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    line-height: 1.6;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem 5%;
+    background-color: var(--bg-color);
+    border-bottom: 1px solid var(--sand);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-style: italic;
+    color: var(--accent-green);
+    letter-spacing: 1px;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+nav a {
+    text-decoration: none;
+    color: var(--text-main);
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    transition: color 0.3s;
+}
+
+nav a:hover {
+    color: var(--accent-green);
+}
+
+.btn-reserve {
+    background-color: var(--accent-green);
+    color: var(--white);
+    padding: 0.6rem 1.2rem;
+    border-radius: 4px;
+    cursor: pointer;
+    border: none;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: opacity 0.3s;
+}
+
+.btn-reserve:hover {
+    opacity: 0.9;
+}
+
+.btn-order {
+    background-color: var(--pop-pink);
+    color: var(--white);
+    padding: 0.6rem 1.2rem;
+    border-radius: 4px;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: opacity 0.3s;
+    display: inline-block;
+}
+
+.btn-order:hover {
+    opacity: 0.9;
+}
+
+/* Botón flotante para el Night/Day Bar */
+.mode-toggle-btn {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background-color: var(--accent-green);
+    color: var(--white);
+    border: none;
+    padding: 0.8rem 1.2rem;
+    border-radius: 30px;
+    cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    overflow: hidden;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Estado al deslizar hacia abajo: Se contrae dejando la luna/sol visible y baja la opacidad */
+.mode-toggle-btn.scrolled-down {
+    padding: 0.85rem 1rem;
+    border-radius: 30px;
+    transform: scale(0.9);
+    opacity: 0.5;
+}
+
+.mode-toggle-btn.scrolled-down .btn-text {
+    display: none;
+}
+
+.menu-toggle {
+    display: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: var(--accent-green);
+}
+
+.ticker {
+    background-color: var(--accent-green);
+    color: var(--white);
+    padding: 0.8rem 1rem;
+    font-size: 0.75rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-align: center;
+    overflow: hidden;
+    width: 100%;
+}
+
+.hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 5rem 2rem 3rem 2rem;
+    max-width: 850px;
+    margin: 0 auto;
+}
+
+.hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.2rem;
+    color: var(--accent-green);
+    margin-bottom: 1.5rem;
+    font-weight: 400;
+}
+
+.hero p {
+    font-size: 1.1rem;
+    color: var(--text-main);
+    opacity: 0.8;
+    margin-bottom: 2rem;
+}
+
+.fun-generator {
+    max-width: 800px;
+    margin: 2rem auto 4rem auto;
+    padding: 3rem;
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+}
+
+.fun-generator h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    color: var(--accent-green);
+    margin-bottom: 1rem;
+}
+
+.fun-box {
+    font-size: 1.1rem;
+    margin: 1.5rem 0;
+    color: var(--text-main);
+    font-weight: 500;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.fun-btn {
+    background-color: var(--pop-pink);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 30px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: transform 0.2s;
+}
+
+.chaos-btn {
+    background-color: var(--accent-green);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 30px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: transform 0.2s;
+}
+
+.fun-btn:hover, .chaos-btn:hover {
+    transform: scale(1.05);
+}
+
+/* Estilos para el Buscador de Adopción de Plantas */
+.plant-adoption-section {
+    max-width: 800px;
+    margin: 2rem auto 4rem auto;
+    padding: 3rem;
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+}
+
+.plant-adoption-section h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    color: var(--accent-green);
+    margin-bottom: 0.8rem;
+}
+
+.plant-adoption-section p {
+    font-size: 0.95rem;
+    color: var(--text-main);
+    opacity: 0.8;
+    margin-bottom: 1.5rem;
+}
+
+.plant-search-box {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    max-width: 500px;
+    margin: 0 auto 1.5rem auto;
+}
+
+.plant-search-box input {
+    flex: 1;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--sand);
+    border-radius: 30px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    outline: none;
+}
+
+.plant-search-box button {
+    background-color: var(--accent-green);
+    color: var(--white);
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 30px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: transform 0.2s;
+}
+
+.plant-search-box button:hover {
+    transform: scale(1.05);
+}
+
+.plant-result-card {
+    font-size: 1.05rem;
+    color: var(--text-main);
+    font-weight: 500;
+    padding: 1.2rem;
+    background-color: var(--bg-color);
+    border-radius: 8px;
+    min-height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed var(--sand);
+    transition: all 0.3s ease;
+}
+
+.featured-section {
+    padding: 4rem 5%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    color: var(--accent-green);
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+.section-subtitle {
+    text-align: center;
+    color: var(--text-main);
+    opacity: 0.7;
+    margin-bottom: 3rem;
+    font-size: 1rem;
+}
+
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+}
+
+.menu-item-card {
+    background-color: var(--card-bg);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.menu-info h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    color: var(--accent-green);
+    margin-bottom: 0.5rem;
+}
+
+.menu-info p {
+    font-size: 0.9rem;
+    color: var(--text-main);
+    opacity: 0.8;
+    margin-bottom: 1rem;
+    max-width: 280px;
+}
+
+.price {
+    font-weight: 600;
+    color: var(--accent-green);
+    font-size: 1.1rem;
+}
+
+.menu-item-img {
+    width: 110px;
+    height: 110px;
+    object-fit: cover;
+    border-radius: 6px;
+    flex-shrink: 0;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.fun-facts-section {
+    padding: 4rem 5%;
+    max-width: 1300px;
+    margin: 0 auto;
+    background-color: var(--sand);
+    border-radius: 12px;
+}
+
+.facts-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.fact-card {
+    background-color: var(--card-bg);
+    padding: 2.5rem 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.fact-card:hover {
+    border-color: var(--accent-green);
+    transform: translateY(-5px);
+}
+
+.fact-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: var(--accent-green);
+    margin-bottom: 1rem;
+}
+
+.fact-card p {
+    color: var(--text-main);
+    opacity: 0.8;
+    font-size: 0.95rem;
+}
+
+.secret-badge {
+    margin-top: 1.5rem;
+    display: inline-block;
+    background-color: var(--sand);
+    color: var(--accent-green);
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.location-section {
+    padding: 4rem 5%;
+    max-width: 1100px;
+    margin: 4rem auto;
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+}
+
+.location-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+}
+
+.location-info h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--accent-green);
+    margin-bottom: 0.5rem;
+}
+
+.hours-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.hours-box h4 {
+    font-family: 'Playfair Display', serif;
+    color: var(--accent-green);
+    margin-bottom: 0.4rem;
+    font-size: 1.2rem;
+}
+
+.hours-box p {
+    color: var(--text-main);
+    opacity: 0.8;
+    font-size: 0.95rem;
+    margin-bottom: 0.2rem;
+}
+
+.map-box {
+    width: 100%;
+    height: 300px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.map-box iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+.insta-section {
+    padding: 4rem 5%;
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.insta-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.insta-item {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    height: 220px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.insta-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.insta-item:hover img {
+    transform: scale(1.08);
+}
+
+.newsletter-section {
+    padding: 4rem 2rem;
+    text-align: center;
+    background-color: var(--sand);
+    max-width: 800px;
+    margin: 0 auto 4rem auto;
+    border-radius: 8px;
+}
+
+.newsletter-section h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    color: var(--accent-green);
+    margin-bottom: 0.8rem;
+}
+
+.newsletter-section p {
+    color: var(--text-main);
+    opacity: 0.8;
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+}
+
+.newsletter-form {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.newsletter-form input {
+    flex: 1;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--sand);
+    border-radius: 4px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: var(--card-bg);
+    color: var(--text-main);
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 1000;
+}
+
+.modal-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal {
+    background-color: var(--card-bg);
+    padding: 2.5rem;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    position: relative;
+}
+
+.modal h2 {
+    font-family: 'Playfair Display', serif;
+    color: var(--accent-green);
+    margin-bottom: 1rem;
+}
+
+.modal input, .modal select {
+    width: 100%;
+    padding: 0.8rem;
+    margin-bottom: 1rem;
+    border: 1px solid var(--sand);
+    border-radius: 4px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+}
+
+.close-modal {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: var(--text-main);
+}
+
+footer {
+    text-align: center;
+    padding: 3rem;
+    background-color: var(--text-main);
+    color: var(--bg-color);
+    font-size: 0.9rem;
+}
+
+@media (max-width: 968px) {
+    .menu-grid, .facts-grid, .location-container, .insta-grid {
+        grid-template-columns: 1fr;
     }
-});
-
-const funQuotes = [
-    "🌿 Vibe check: You need an Iced Matcha and a plant you will probably name Bob.",
-    "☕ Energy level: 2 sips away from fixing your entire life choices.",
-    "🪴 Plant advice: If it dies, just buy another one and gaslight yourself into thinking it's a new species.",
-    "🍸 Evening mood: You are 1 Garden Herb Spritz away from starting a podcast.",
-    "✨ Reminder: You came here to work on your laptop, but you're actually just going to scroll TikTok in a gorgeous aesthetic setting.",
-    "🌞 Morning mood: Powered strictly by iced caffeine and denial.",
-    "🌵 Plant mom/dad status: Overwatering is an act of aggressive love.",
-    "🌙 Night mode: Where good intentions go to die over craft cocktails in the zen patio."
-];
-
-const chaosPicks = [
-    "🎲 Chaos Pick: Order 2 Iced Coconut Matchas and pretend you're a botanical CEO.",
-    "🎲 Chaos Pick: Get The Atabey Wrap and eat it entirely in silence while judging passersby.",
-    "🎲 Chaos Pick: Order a Botanical Cold Brew and challenge a stranger to a staring contest.",
-    "🎲 Chaos Pick: Ask the barista for 'the secret menu' just to see what happens."
-];
-
-let lastQuoteIndex = -1;
-
-function generateMood() {
-    const textBox = document.getElementById('funText');
-    let randomIndex;
-    do {
-        randomIndex = Math.floor(Math.random() * funQuotes.length);
-    } while (randomIndex === lastQuoteIndex);
-    lastQuoteIndex = randomIndex;
-    
-    textBox.style.opacity = 0;
-    setTimeout(() => {
-        textBox.textContent = funQuotes[randomIndex];
-        textBox.style.opacity = 1;
-    }, 200);
-}
-
-function triggerChaos() {
-    const textBox = document.getElementById('funText');
-    const randomChaos = chaosPicks[Math.floor(Math.random() * chaosPicks.length)];
-    textBox.style.opacity = 0;
-    setTimeout(() => {
-        textBox.textContent = randomChaos;
-        textBox.style.opacity = 1;
-    }, 200);
-}
-
-function secretReveal(card, secretText) {
-    const p = card.querySelector('p');
-    const badge = card.querySelector('.secret-badge');
-    if (!card.classList.contains('revealed')) {
-        card.dataset.originalText = p.textContent;
-        p.textContent = secretText;
-        badge.textContent = 'Tap to go back ↩';
-        card.classList.add('revealed');
-        card.style.backgroundColor = htmlElement.classList.contains('night-mode') ? '#242D25' : '#E6E2D8';
-    } else {
-        p.textContent = card.dataset.originalText;
-        badge.textContent = 'Tap for secret 🤫';
-        card.classList.remove('revealed');
-        card.style.backgroundColor = '';
+    .ticker {
+        font-size: 0.65rem;
+        letter-spacing: 1px;
+        padding: 0.6rem 0.5rem;
+        white-space: normal;
     }
-}
-
-function revealSecret(card, text) {
-    secretReveal(card, text);
-}
-
-const plantDatabase = {
-    "monstera": "🌱 Monstera (Named 'Carlos'): Thinks he's a tropical god. Wants bright indirect light, a misting session, and for you to stop touching his new fenestrated leaves.",
-    "money tree": "🌿 Money Tree (Named 'Lulu'): Supposed to bring financial prosperity. Currently judging your recent online shopping cart choices. Water only when dry.",
-    "aglaonema": "🪴 Aglaonema (Named 'Abuela'): Low maintenance queen. She survives on pure spite, fluorescent office light, and weekly sips of tap water.",
-    "philodendron": "🍃 Philodendron (Named 'Ziggy'): Dramatic climber. If you forget to water him for 2 days, he will throw a full emotional tantrum.",
-    "syngonium": "🌿 Syngonium (Named 'Pip'): Arrowhead plant. Changes leaf shapes just to confuse you. Likes humidity and being complimented on her colors.",
-    "orchid": "🌸 Orchid (Named 'Priscilla'): High maintenance diva. Demands absolute perfection, ice cubes on Tuesdays, and a round of applause when she blooms once a year."
-};
-
-function searchPlantVibe() {
-    const input = document.getElementById('plantInput').value.toLowerCase().trim();
-    const resultBox = document.getElementById('plantResult');
     
-    resultBox.style.opacity = 0;
-    setTimeout(() => {
-        if (plantDatabase[input]) {
-            resultBox.textContent = plantDatabase[input];
-        } else if (input === "") {
-            resultBox.textContent = "✨ Please type a plant name first!";
-        } else {
-            resultBox.textContent = `🌵 Plant '${input}' is currently hiding in the jungle or plotting a rebellion. Try searching: Monstera, Money Tree, Aglaonema, Philodendron, Syngonium, or Orchid.`;
-        }
-        resultBox.style.opacity = 1;
-    }, 200);
+    /* Menú móvil con transición fluida para deslizarse hacia arriba al cerrar */
+    nav {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: var(--card-bg);
+        padding: 1.5rem;
+        border-bottom: 1px solid var(--sand);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        gap: 1rem;
+        z-index: 200;
+        
+        transform: translateY(-20px);
+        opacity: 0;
+        visibility: hidden;
+        transition: transform 0.35s ease, opacity 0.35s ease, visibility 0.35s ease;
+    }
+    
+    nav.active {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+    }
+    
+    nav.hiding {
+        transform: translateY(-30px);
+        opacity: 0;
+    }
+
+    nav a {
+        margin: 0;
+    }
+    .menu-toggle {
+        display: block;
+    }
+    .hero h1 {
+        font-size: 2.3rem;
+    }
+    .newsletter-form {
+        flex-direction: column;
+    }
+    .plant-search-box {
+        flex-direction: column;
+    }
 }
