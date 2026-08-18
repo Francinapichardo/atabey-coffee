@@ -130,7 +130,7 @@ nav a:hover {
     transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Estado al deslizar hacia abajo: Se contrae dejando visible solo el icono y baja la opacidad */
+/* Estado al deslizar hacia abajo: Se contrae dejando la luna/sol visible y baja la opacidad */
 .mode-toggle-btn.scrolled-down {
     padding: 0.85rem 1rem;
     border-radius: 30px;
