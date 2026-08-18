@@ -36,7 +36,7 @@
     </section>
 
     <!-- Generador de Humor Interactivo -->
-    <div class="fun-generator">
+    <section class="fun-generator">
         <h3>✨ The Atabey Vibe & Chaos Center ✨</h3>
         <div class="fun-box" id="funText">
             Click the buttons below to pick your energy or embrace total chaos 🌿☕
@@ -45,7 +45,7 @@
             <button class="fun-btn" onclick="generateMood()">Tell Me My Vibe</button>
             <button class="chaos-btn" onclick="triggerChaos()">🎲 Random Menu Chaos</button>
         </div>
-    </div>
+    </section>
 
     <!-- Buscador de Adopción de Plantas Interactiva -->
     <section class="plant-adoption-section">
@@ -106,7 +106,7 @@
     </section>
 
     <!-- Fun Facts -->
-    <section style="padding: 2rem 5%;">
+    <section class="fun-facts-container">
         <div class="fun-facts-section">
             <h2 class="section-title">The Real Talk</h2>
             <p class="section-subtitle">Tap each card because reading boring text is so last year 👀</p>
@@ -136,7 +136,7 @@
         <div class="location-container">
             <div class="location-info">
                 <h3>Location & Hours</h3>
-                <p style="opacity: 0.7; font-size: 0.95rem;">Heart of Mills 50 • Orlando, FL</p>
+                <p class="location-tagline">Heart of Mills 50 • Orlando, FL</p>
                 
                 <div class="hours-grid">
                     <div class="hours-box">
@@ -154,7 +154,7 @@
                 </div>
             </div>
             <div class="map-box">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3505.856983777598!2d-81.3655!3d28.5535!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88e7700e844a49c9%3A0x6b16e45f917578!2sMills%2050%2C%20Orlando%2C%20FL!5e0!3m2!1sen!2sus&hl=en" allowfullscreen="" loading="lazy"></iframe>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3505.856983777598!2d-81.3655!3d28.5535!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88e7700e844a49c9%3A0x6b16e45f917578!2sMills%2050%2C%20Orlando%2C%20FL!5e0!3m2!1sen!2sus&hl=en" title="Map showing Atabey in Mills 50, Orlando" allowfullscreen=""></iframe>
             </div>
         </div>
     </section>
@@ -194,16 +194,18 @@
         <div class="modal">
             <span class="close-modal" id="closeModal">&times;</span>
             <h2>Book Your Table</h2>
-            <p style="opacity: 0.7; font-size: 0.9rem; margin-bottom: 1.5rem;">Secure your spot in our zen patio before everyone else does.</p>
+            <p class="modal-intro">Secure your spot in our zen patio before everyone else does.</p>
             <form onsubmit="event.preventDefault(); alert('Boom! Table reserved. See you soon, legend.'); toggleModal();">
                 <input type="text" placeholder="Your Name" required>
-                <input type="date" required>
-                <select required>
+                <label for="reservation-date">Reservation date</label>
+                <input type="date" id="reservation-date" required>
+                <label for="reservation-vibe">Reservation type</label>
+                <select id="reservation-vibe" required>
                     <option value="">Select Your Vibe</option>
                     <option value="brunch">Coffee & Brunch (Daytime)</option>
                     <option value="bar">Botanical Bar (Nighttime / Drama)</option>
                 </select>
-                <button type="submit" class="btn-reserve" style="width: 100%;">Lock It In</button>
+                <button type="submit" class="btn-reserve full-width">Lock It In</button>
             </form>
         </div>
     </div>
